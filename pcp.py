@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 """
+An implementation of the Principal Component Pursuit algorithm for robust PCA
+as described in `Candes, Li, Ma, & Wright <http://arxiv.org/abs/0912.3599>`_.
 
-References:
-- http://perception.csl.illinois.edu/matrix-rank/Files/RPCA_JACM.pdf
-- http://blog.shriphani.com/2013/12/18/
+An alternative Python implementation using non-standard dependencies and
+different hyperparameter choices is available at:
+
+http://blog.shriphani.com/2013/12/18/
     robust-principal-component-pursuit-background-matrix-recovery/
 
 """
