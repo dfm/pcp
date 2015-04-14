@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
     if "--test" in sys.argv:
         M = (10*np.ones((10, 10))) + (-5 * np.eye(10))
-        L, S, svd = pcp(M)
+        L, S, svd = pcp(M, verbose=True, l=10)
         assert np.allclose(M, L + S), "Failed"
         print("passed")
         sys.exit(0)

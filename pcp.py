@@ -21,7 +21,8 @@ import logging
 import numpy as np
 
 
-def pcp(M, delta=1e-6, mu=None, maxiter=500, verbose=False, missing_data=True):
+def pcp(M, delta=1e-6, mu=None, maxiter=500, verbose=False, missing_data=True,
+        **svd_args):
     shape = M.shape
     if missing_data:
         missing = ~(np.isfinite(M))
@@ -50,7 +51,8 @@ def pcp(M, delta=1e-6, mu=None, maxiter=500, verbose=False, missing_data=True):
         if rank >= np.min(shape):
             u, s, v = np.linalg.svd(M - S + Y / mu, full_matrices=False)
         else:
-            u, s, v = fbpca.pca(M - S + Y / mu, k=rank, raw=True)
+            u, s, v = fbpca.pca(M - S + Y / mu, k=rank, raw=True,
+                                **svd_args)
         svd_time = time.time() - strt
 
         s = shrink(s, 1.0 / mu)
