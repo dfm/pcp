@@ -19,13 +19,12 @@ def bitmap_to_mat(bitmap_seq):
         assert img.size == shape
         img = np.array(img.getdata())
         matrix.append(img)
+    print(matrix)
     return np.array(matrix), shape[::-1]
 
 
-def do_plot(img, shape):
-    pl.clf()
-    pl.imshow(img.reshape(shape), cmap="gray", interpolation="nearest")
-    return pl.gcf()
+def do_plot(ax, img, shape):
+    ax.imshow(img.reshape(shape), cmap="gray", interpolation="nearest")
 
 
 if __name__ == "__main__":
@@ -40,16 +39,22 @@ if __name__ == "__main__":
         print("passed")
         sys.exit(0)
 
-    M, shape = bitmap_to_mat(glob.glob("test_data/Escalator/*.bmp")[:300])
-    fig = do_plot(M[0], shape)
-    fig.savefig("plot-initial.png")
+    M, shape = bitmap_to_mat(glob.glob("test_data/Escalator/*.bmp")[:30])
 
-    L, S, (u, s, v) = pcp(M, maxiter=100, verbose=True, delta=1e-4)
-    fig = do_plot(L[0], shape)
-    fig.savefig("plot-L.png")
+    fig, axes = pl.subplots(1, 3, sharex=True, sharey=True)
+    for i in range(len(M)):
+        do_plot(axes[0], M[i], shape)
+        fig.savefig("results/{0:05d}.png".format(i))
 
-    fig = do_plot(S[0], shape)
-    fig.savefig("plot-S.png")
+    # fig = do_plot(M[0], shape)
+    # fig.savefig("plot-initial.png")
 
-    fig = do_plot(v[0], shape)
-    fig.savefig("plot-eigen.png")
+    # L, S, (u, s, v) = pcp(M, maxiter=1, verbose=True, delta=1e-4)
+    # fig = do_plot(L[0], shape)
+    # fig.savefig("plot-L.png")
+
+    # fig = do_plot(S[0], shape)
+    # fig.savefig("plot-S.png")
+
+    # fig = do_plot(v[0], shape)
+    # fig.savefig("plot-eigen.png")
