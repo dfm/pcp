@@ -15,9 +15,10 @@ from __future__ import division, print_function
 
 __all__ = ["pcp"]
 
+import time
+import fbpca
 import logging
 import numpy as np
-from scipy.sparse.linalg import svds
 
 
 def pcp(M, delta=1e-6, mu=None, maxiter=500, verbose=False, missing_data=True):
@@ -45,13 +46,12 @@ def pcp(M, delta=1e-6, mu=None, maxiter=500, verbose=False, missing_data=True):
     Y = np.zeros(shape)
     while i < max(maxiter, 1):
         # SVD step.
+        strt = time.time()
         if rank >= np.min(shape):
             u, s, v = np.linalg.svd(M - S + Y / mu, full_matrices=False)
         else:
-            u, s, v = svds(M - S + Y / mu, k=rank, tol=1.0/mu)
-
-            # The sparse implementation returns the SVs in reverse order.
-            u, s, v = u[:, ::-1], s[::-1], v[::-1, :]
+            u, s, v = fbpca.pca(M - S + Y / mu, k=rank, raw=True)
+        svd_time = time.time() - strt
 
         s = shrink(s, 1.0 / mu)
         rank = np.sum(s > 0.0)
@@ -69,8 +69,9 @@ def pcp(M, delta=1e-6, mu=None, maxiter=500, verbose=False, missing_data=True):
         # Check for convergence.
         err = np.sqrt(np.sum(step ** 2) / norm)
         if verbose:
-            print("Iteration {0}: error={1:.3e}, rank={2:d}, nnz={3:d}"
-                  .format(i, err, np.sum(s > 0), np.sum(S > 0)))
+            print(("Iteration {0}: error={1:.3e}, rank={2:d}, nnz={3:d}, "
+                   "time={4:.3e}")
+                  .format(i, err, np.sum(s > 0), np.sum(S > 0), svd_time))
         if err < delta:
             break
         i += 1

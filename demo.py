@@ -44,7 +44,7 @@ if __name__ == "__main__":
     fig = do_plot(M[0], shape)
     fig.savefig("plot-initial.png")
 
-    L, S, (u, s, v) = pcp(M, maxiter=1000, verbose=True, delta=1e-4)
+    L, S, (u, s, v) = pcp(M, maxiter=100, verbose=True, delta=1e-4)
     fig = do_plot(L[0], shape)
     fig.savefig("plot-L.png")
 
