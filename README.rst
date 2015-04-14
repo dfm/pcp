@@ -17,7 +17,7 @@ TODO
 Demo
 ----
 
-
+.. image:: http://bbq.dfm.io/~dfm/pcp-animation.gif
 
 
 Author & License
