@@ -19,12 +19,14 @@ def bitmap_to_mat(bitmap_seq):
         assert img.size == shape
         img = np.array(img.getdata())
         matrix.append(img)
-    print(matrix)
     return np.array(matrix), shape[::-1]
 
 
 def do_plot(ax, img, shape):
+    ax.cla()
     ax.imshow(img.reshape(shape), cmap="gray", interpolation="nearest")
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
 
 
 if __name__ == "__main__":
@@ -39,22 +41,17 @@ if __name__ == "__main__":
         print("passed")
         sys.exit(0)
 
-    M, shape = bitmap_to_mat(glob.glob("test_data/Escalator/*.bmp")[:30])
+    M, shape = bitmap_to_mat(glob.glob("test_data/Escalator/*.bmp")[:2000:2])
+    print(M.shape)
+    L, S, (u, s, v) = pcp(M, maxiter=50, verbose=True)
 
-    fig, axes = pl.subplots(1, 3, sharex=True, sharey=True)
-    for i in range(len(M)):
+    fig, axes = pl.subplots(1, 3, figsize=(10, 4))
+    fig.subplots_adjust(left=0, right=1, hspace=0, wspace=0.01)
+    for i in range(min(len(M), 500)):
         do_plot(axes[0], M[i], shape)
+        axes[0].set_title("raw")
+        do_plot(axes[1], L[i], shape)
+        axes[1].set_title("low rank")
+        do_plot(axes[2], S[i], shape)
+        axes[2].set_title("sparse")
         fig.savefig("results/{0:05d}.png".format(i))
-
-    # fig = do_plot(M[0], shape)
-    # fig.savefig("plot-initial.png")
-
-    # L, S, (u, s, v) = pcp(M, maxiter=1, verbose=True, delta=1e-4)
-    # fig = do_plot(L[0], shape)
-    # fig.savefig("plot-L.png")
-
-    # fig = do_plot(S[0], shape)
-    # fig.savefig("plot-S.png")
-
-    # fig = do_plot(v[0], shape)
-    # fig.savefig("plot-eigen.png")
