@@ -59,16 +59,16 @@ def pcp(M, delta=1e-6, mu=None, maxiter=500, verbose=False, missing_data=True,
     while i < max(maxiter, 1):
         # SVD step.
         strt = time.time()
-        u, s, v = _svd(svd_method, M - S + Y / mu, rank+1, mu, **svd_args)
+        u, s, v = _svd(svd_method, M - S + Y / mu, rank+1, 1./mu, **svd_args)
         svd_time = time.time() - strt
 
-        s = shrink(s, mu)
+        s = shrink(s, 1./mu)
         rank = np.sum(s > 0.0)
         u, s, v = u[:, :rank], s[:rank], v[:rank, :]
         L = np.dot(u, np.dot(np.diag(s), v))
 
         # Shrinkage step.
-        S = shrink(M - L + Y / mu, lam * mu)
+        S = shrink(M - L + Y / mu, lam / mu)
 
         # Lagrange step.
         step = M - L - S
