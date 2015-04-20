@@ -19,7 +19,6 @@ def bitmap_to_mat(bitmap_seq):
         assert img.size == shape
         img = np.array(img.getdata())
         matrix.append(img)
-    print(matrix)
     return np.array(matrix), shape[::-1]
 
 
