@@ -34,7 +34,9 @@ def pcp(M, delta=1e-6, mu=None, maxiter=500, verbose=False, missing_data=True,
     shape = M.shape
     if missing_data:
         missing = ~(np.isfinite(M))
-        M[missing] = 0.0
+        if np.any(missing):
+            M = np.array(M)
+            M[missing] = 0.0
     else:
         missing = np.zeros_like(M, dtype=bool)
         if not np.all(np.isfinite(M)):
