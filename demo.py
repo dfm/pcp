@@ -43,8 +43,7 @@ if __name__ == "__main__":
 
     M, shape = bitmap_to_mat(glob.glob("test_data/Escalator/*.bmp")[:2000:2])
     print(M.shape)
-    L, S, (u, s, v) = pcp(M, maxiter=50, verbose=True, svd_method="exact",
-                          mu=1.0)
+    L, S, (u, s, v) = pcp(M, maxiter=50, verbose=True, svd_method="exact")
 
     fig, axes = pl.subplots(1, 3, figsize=(10, 4))
     fig.subplots_adjust(left=0, right=1, hspace=0, wspace=0.01)

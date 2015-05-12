@@ -17,7 +17,12 @@ TODO
 Demo
 ----
 
-.. image:: http://bbq.dfm.io/~dfm/pcp-animation.gif
+Applied to `the 'Escalator' dataset
+<http://perception.i2r.a-star.edu.sg/bk_model/bk_index.html>`_ (using the code
+in the ``demo.py`` script, this algorithm produces a video with frames that
+look like:
+
+.. image:: https://raw.githubusercontent.com/dfm/pcp/master/demo.png
 
 
 Author & License
